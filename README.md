@@ -1,5 +1,5 @@
 # ansluta-python
-### Ikea Ansluta remote control by Raspberry pi and CC2500 2.4Ghz transceiver via python
+#### Ikea Ansluta remote control by Raspberry pi and CC2500 2.4Ghz transceiver via python
 
 
 This project was created to control Ikea Omlopp/Utrusta lights by Raspberry pi.
