@@ -16,3 +16,12 @@ The original remote send a series of data icluded two own address bytes.
   - CC2500 Transiver module (WLC24D) [ebay](https://www.ebay.com/itm/2PCS-1-8-3-6V-CC2500-IC-Wireless-RF-2400MHZ-Transceiver-Module-SPI-ISM-Demo-Code/401239287968)
 
 <img src="https://github.com/matlen67/ansluta-python/blob/master/pictures/rpi.jpg" width="128">       <img src="https://github.com/matlen67/ansluta-python/blob/master/pictures/WLC-24D.png" width="128">
+
+## Install software:
+- Copy 'ansluta-python' folder to Raspberry /usr/src/
+- got to folder: ``cd usr/src/ansluta-python``
+- listen for your addressbytes: ``python ansluty.py l``
+- press button on original remote
+- note your found address Bytes
+
+<img src="https://github.com/matlen67/ansluta-python/blob/master/pictures/console.png" width="128">
