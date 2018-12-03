@@ -33,21 +33,21 @@ def sendStrobe(strobe):
 def initCC2500():
 	writeReg(CC2500.REG_IOCFG2, 0x29)
 	writeReg(CC2500.REG_IOCFG0, 0x06)
-	writeReg(CC2500.REG_PKTLEN, 0xFF) # Max packet length
+	writeReg(CC2500.REG_PKTLEN, 0xFF) 
 	writeReg(CC2500.REG_PKTCTRL1, 0x04)
-	writeReg(CC2500.REG_PKTCTRL0, 0x05) # variable packet length; CRC enabled
-	writeReg(CC2500.REG_ADDR, 0x01) # Device address
-	writeReg(CC2500.REG_CHANNR, 0x10) # Channel number
+	writeReg(CC2500.REG_PKTCTRL0, 0x05) 
+	writeReg(CC2500.REG_ADDR, 0x01) 
+	writeReg(CC2500.REG_CHANNR, 0x10) 
 	writeReg(CC2500.REG_FSCTRL1, 0x09)
 	writeReg(CC2500.REG_FSCTRL0, 0x00)
-	writeReg(CC2500.REG_FREQ2, 0x5D) # RF frequency 2433.000000 MHz 
-	writeReg(CC2500.REG_FREQ1, 0x93) # RF frequency 2433.000000 MHz 
-	writeReg(CC2500.REG_FREQ0, 0xB1) # RF frequency 2433.000000 MHz
+	writeReg(CC2500.REG_FREQ2, 0x5D) 
+	writeReg(CC2500.REG_FREQ1, 0x93) 
+	writeReg(CC2500.REG_FREQ0, 0xB1)
 	writeReg(CC2500.REG_MDMCFG4, 0x2D)
-	writeReg(CC2500.REG_MDMCFG3, 0x3B) # Data rate 250.000000 kbps
-	writeReg(CC2500.REG_MDMCFG2, 0x73) # MSK, No Manchester; 30/32 sync mode
+	writeReg(CC2500.REG_MDMCFG3, 0x3B)
+	writeReg(CC2500.REG_MDMCFG2, 0x73)
 	writeReg(CC2500.REG_MDMCFG1, 0xA2)
-	writeReg(CC2500.REG_MDMCFG0, 0xF8) # Channel spacing 199.9500 kHz
+	writeReg(CC2500.REG_MDMCFG0, 0xF8)
 	writeReg(CC2500.REG_DEVIATN, 0x01)
 	writeReg(CC2500.REG_MCSM2, 0x07)
 	writeReg(CC2500.REG_MCSM1, 0x30)
@@ -122,71 +122,76 @@ def sendCommand(addrByteA, addrByteB, command):
     for i in range(50):    	
 		sendStrobe(CC2500.CC2500_SFTX)
 		sendStrobe(CC2500.CC2500_SIDLE)
-		
 		buf=list([0x7F, 0x06, 0x55, 0x01, addrByteA, addrByteB, command, 0xAA])
 		spi.xfer(buf)
-        
-		sendStrobe(CC2500.CC2500_STX)      # 0x35  transmit data in TX
+		sendStrobe(CC2500.CC2500_STX)      
 		time.sleep(0.0016)
 
+
+def ansluta0(addrA, addrB):
+	openSpi()
+	writeReg(0x3E, 0xFF)
+	sendCommand(addrA,addrB,0x01)
+	spi.close
+	
+
+def ansluta50(addrA, addrB):
+	openSpi()
+	writeReg(0x3E, 0xFF)
+	sendCommand(addrA,addrB,0x02)
+	spi.close
+
+
+def ansluta100(addrA, addrB):
+	openSpi()
+	writeReg(0x3E, 0xFF)
+	sendCommand(addrA,addrB,0x03)
+	spi.close
+	
+
+def anslutaGetAddressBytes():
+	openSpi()
+	sendStrobe(CC2500.CC2500_SRES)
+	initCC2500()
+	readAddressBytes()
+	spi.close
 
 
 def main():	
 
-	for arg in sys.argv[0:]:
-		print arg
-	
-	
-	if len(sys.argv) == 4:
-		addrA = int(sys.argv[1][2:],16)
-		addrB = int(sys.argv[2][2:],16)
 		
+	if len(sys.argv) == 2:
+		print('get ansluta AddressBytes')
+		anslutaGetAddressBytes()
+		sys.exit(0)
+			
+	elif len(sys.argv) == 4:
+		addrByteA = int(sys.argv[1][2:],16)
+		addrByteB = int(sys.argv[2][2:],16)
 		
 		if sys.argv[3] == "0":
-			print "argv 1"
-			print('open spi')
-			openSpi()
-			writeReg(0x3E, 0xFF)
-			sendCommand(addrA,addrB,0x01)
-			spi.close
+			print "ansluta off"
+			ansluta0(addrByteA, addrByteB)
 			sys.exit(0)
 			
 		elif sys.argv[3] == "50":
-			print "argv 50"
-			print('open spi')
-			openSpi()
-			writeReg(0x3E, 0xFF)
-			sendCommand(addrA,addrB,0x02)
-			spi.close
+			print "ansluta 50%"
+			ansluta50(addrByteA, addrByteB)
 			sys.exit(0)
 			
 		elif sys.argv[3] == "100":
-			print "argv 100"
-			print('open spi')
-			openSpi()
-			writeReg(0x3E, 0xFF)
-			sendCommand(addrA,addrB,0x03)
-			spi.close
-			sys.exit(0)	
-			
-		else:
-			print('open spi')
-			openSpi()
-			print('reset CC2500')
-			sendStrobe(CC2500.CC2500_SRES)
-			#time.sleep(0.01)
-			print('init CC2500')
-			initCC2500()
-			writeReg(0x3E, 0xFF)
-			readAddressBytes()
-			spi.close
-			print('close spi')
+			print "ansluta 100%"
+			ansluta100(addrByteA, addrByteB)
 			sys.exit(0)
+			
 	else:
-		print ("\nUsage: python ansluta.py <addrByte1 addrByte2 0> <addrByte1 addrByte2 50> <addrByte1 addrByte2 100>\n")
+		print ("\nUsage: python ansluta.py <addrByte1 addrByte2 0> or <addrByte1 addrByte2 50> or <addrByte1 addrByte2 100>")
 		print ("Example: python ansluta.py 0xD0 0x9A 50\n")
+		
+		print ("Usage: python ansluta.py <l> -> listen for addressbyte")
+		print ("Example: python ansluta.py l\n")
 		sys.exit(2)
-	
+#
 
 if __name__== '__main__':
 	main()
