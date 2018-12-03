@@ -22,6 +22,13 @@ The original remote send a series of data icluded two own address bytes.
 - got to folder: ``cd usr/src/ansluta-python``
 - listen for your addressbytes: ``python ansluty.py l``
 - press button on original remote
-- note your found address Bytes
+- note your found address Bytes (0xd0 and 0x9a)
 
-<img src="https://github.com/matlen67/ansluta-python/blob/master/pictures/console.png" width="128">
+<img src="https://github.com/matlen67/ansluta-python/blob/master/pictures/console.png" width="256">
+
+## Send commands
+replace 0xD0 and 0x9A with your address bytes!
+
+- lights off  `` python ansluta.py 0xD0 0x9A 0``
+- lights 50%  `` python ansluta.py 0xD0 0x9A 50``
+- lights 100% `` python ansluta.py 0xD0 0x9A 100``
