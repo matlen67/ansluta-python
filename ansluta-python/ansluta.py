@@ -130,6 +130,7 @@ def sendCommand(addrByteA, addrByteB, command):
 
 def ansluta0(addrA, addrB):
 	openSpi()
+	initCC2500()
 	writeReg(0x3E, 0xFF)
 	sendCommand(addrA,addrB,0x01)
 	spi.close
@@ -137,6 +138,7 @@ def ansluta0(addrA, addrB):
 
 def ansluta50(addrA, addrB):
 	openSpi()
+	initCC2500()
 	writeReg(0x3E, 0xFF)
 	sendCommand(addrA,addrB,0x02)
 	spi.close
@@ -144,6 +146,7 @@ def ansluta50(addrA, addrB):
 
 def ansluta100(addrA, addrB):
 	openSpi()
+	initCC2500()
 	writeReg(0x3E, 0xFF)
 	sendCommand(addrA,addrB,0x03)
 	spi.close
@@ -191,7 +194,7 @@ def main():
 		print ("Usage: python ansluta.py <l> -> listen for addressbyte")
 		print ("Example: python ansluta.py l\n")
 		sys.exit(2)
-#
+
 
 if __name__== '__main__':
 	main()
